@@ -1,0 +1,25 @@
+name: Update Deps
+on:
+  # allow manual triggers
+  workflow_dispatch: {}
+  # run every day at 10am
+  schedule:
+    - cron: '0 10 * * *'
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          token: ${{ secrets.GH_PUSH_TO_REPO_TOKEN }}
+          fetch-depth: 0
+      - uses: actions/setup-java@v2
+        with:
+          java-version: '17'
+          distribution: 'zulu'
+      - uses: markelliot/update-gradle-deps@v1
+        with:
+          push-to-repo-token: ${{ secrets.GH_PUSH_TO_REPO_TOKEN }}
+          commit-user: markelliot
+          commit-email: markelliot@users.noreply.github.com
